@@ -1,0 +1,2 @@
+[default.databases.medata]
+url = "sqlite:./test.db"
