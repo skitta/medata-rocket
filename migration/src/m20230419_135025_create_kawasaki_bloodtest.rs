@@ -8,31 +8,33 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration script
+        // Replace the sample below with your own migration scripts
+
         manager
             .create_table(
                 Table::create()
-                    .table(KawasakiLiverFunction::Table)
+                    .table(KawasakiBloodTest::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(KawasakiLiverFunction::Id)
+                        ColumnDef::new(KawasakiBloodTest::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(KawasakiLiverFunction::Patient).integer().not_null())
-                    .col(ColumnDef::new(KawasakiLiverFunction::Date).date().not_null())
-                    .col(ColumnDef::new(KawasakiLiverFunction::Ast).float())
-                    .col(ColumnDef::new(KawasakiLiverFunction::Alt).float())
-                    .col(ColumnDef::new(KawasakiLiverFunction::Pa).float())
+                    .col(ColumnDef::new(KawasakiBloodTest::Patient).integer().not_null())
+                    .col(ColumnDef::new(KawasakiBloodTest::Date).date().not_null())
+                    .col(ColumnDef::new(KawasakiBloodTest::Wbc).float())
+                    .col(ColumnDef::new(KawasakiBloodTest::Ne).float())
+                    .col(ColumnDef::new(KawasakiBloodTest::Ly).float())
+                    .col(ColumnDef::new(KawasakiBloodTest::Mo).float())
+                    .col(ColumnDef::new(KawasakiBloodTest::Rbc).float())
+                    .col(ColumnDef::new(KawasakiBloodTest::Plt).float())
                     .foreign_key(
                         ForeignKey::create()
-                            .name("pk-kawasaki_liverfunction_patient_id")
-                            .from(KawasakiLiverFunction::Table, KawasakiLiverFunction::Patient)
+                            .name("fk-kawasaki_blood_test_patient_id")
+                            .from(KawasakiBloodTest::Table, KawasakiBloodTest::Patient)
                             .to(KawasakiPatient::Table, KawasakiPatient::Id)
-                            .on_update(ForeignKeyAction::Cascade)
-                            .on_delete(ForeignKeyAction::Cascade)
                     )
                     .to_owned(),
             )
@@ -41,20 +43,24 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
+
         manager
-            .drop_table(Table::drop().table(KawasakiLiverFunction::Table).to_owned())
+            .drop_table(Table::drop().table(KawasakiBloodTest::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum KawasakiLiverFunction {
+enum KawasakiBloodTest{
     Table,
     Id,
     Patient,
     Date,
-    Ast,
-    Alt,
-    Pa,
+    Wbc,
+    Ne,
+    Ly,
+    Mo,
+    Rbc,
+    Plt,
 }

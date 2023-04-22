@@ -1,6 +1,5 @@
 use sea_orm::{ DbConn, error::DbErr, Set, ActiveModelTrait, EntityTrait, DeleteResult, QueryOrder, PaginatorTrait };
-use crate::models::entity::{prelude::*, kawasaki::patient};
-
+use crate::entity::prelude::*;
 
 pub struct Patient;
 
@@ -59,7 +58,7 @@ impl Patient {
 
     pub async fn all(db: &DbConn, page: u64, page_size: u64) -> Result<(Vec<KawasakiPatientModel>, u64), DbErr> {
         let paginator = KawasakiPatient::find()
-            .order_by_asc(patient::Column::Id)
+            .order_by_asc(KawasakiPatientColumn::Id)
             .paginate(db, page_size);
         let num_page = paginator.num_pages().await?;
         paginator.fetch_page(page - 1).await.map(|p| (p, num_page))

@@ -1,6 +1,6 @@
 use sea_orm_migration::prelude::*;
 
-use super::m20230419_073327_kawasaki_patient::KawasakiPatient;
+use super::m20230419_073327_create_kawasaki_patient::KawasakiPatient;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;

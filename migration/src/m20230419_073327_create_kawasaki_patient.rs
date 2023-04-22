@@ -1,6 +1,6 @@
 use sea_orm_migration::prelude::*;
 
-use super::m20230419_065718_kawasaki_group::KawasakiGroup;
+use super::m20230419_065718_create_kawasaki_group::KawasakiGroup;
 
 #[derive(Iden)]
 pub enum KawasakiPatient {
