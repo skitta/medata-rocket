@@ -27,10 +27,6 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Echocardiography::Lmca).float())
                     .col(ColumnDef::new(Echocardiography::Lad).float())
                     .col(ColumnDef::new(Echocardiography::Lcx).float())
-                    .col(ColumnDef::new(Echocardiography::RcaZ).float())
-                    .col(ColumnDef::new(Echocardiography::LmcaZ).float())
-                    .col(ColumnDef::new(Echocardiography::LadZ).float())
-                    .col(ColumnDef::new(Echocardiography::LcxZ).float())
                     .foreign_key(
                         ForeignKey::create()
                             .name("pk-echocardiography_document_id")
@@ -63,8 +59,4 @@ enum Echocardiography {
     Lmca,
     Lad,
     Lcx,
-    LmcaZ,
-    RcaZ,
-    LadZ,
-    LcxZ,
 }

@@ -1,4 +1,7 @@
-use sea_orm::{ DbConn, error::DbErr, Set, ActiveModelTrait, EntityTrait, DeleteResult, QueryOrder, PaginatorTrait };
+use sea_orm::{
+    error::DbErr, ActiveModelTrait, DbConn, DeleteResult, EntityTrait, PaginatorTrait, QueryOrder,
+    Set,
+};
 
 use crate::entity::patient;
 
@@ -52,7 +55,11 @@ impl Patient {
             .ok_or(DbErr::Custom("Cannot find patient.".to_owned()))
     }
 
-    pub async fn all(db: &DbConn, page: u64, page_size: u64) -> Result<(Vec<patient::Model>, u64), DbErr> {
+    pub async fn all(
+        db: &DbConn,
+        page: u64,
+        page_size: u64,
+    ) -> Result<(Vec<patient::Model>, u64), DbErr> {
         let paginator = patient::Entity::find()
             .order_by_asc(patient::Column::Id)
             .paginate(db, page_size);

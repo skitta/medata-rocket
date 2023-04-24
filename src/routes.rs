@@ -1,11 +1,40 @@
 use rocket::form::Form;
+use rocket::{ get, post, patch };
 use rocket::response::status::{Accepted, BadRequest, NotFound};
 use rocket::serde::json::{json, Json, Value};
 use sea_orm_rocket::Connection;
 
-use crate::entity::patient;
-use crate::mutation::Patient;
+use crate::entity::{patient, enroll_group};
+use crate::mutation::{Patient, EnrollGroup};
 use crate::Db;
+
+#[post("/enroll_group/<name>")]
+pub async fn new_group(conn: Connection<'_, Db>, name: &str) -> Result<Accepted<String>, BadRequest<String>> {
+    match EnrollGroup::create(conn.into_inner(), name).await {
+        Ok(_) => Ok(Accepted(Some("patient created".to_owned()))),
+        Err(e) => Err(BadRequest(Some(e.to_string())))
+    }
+}
+
+#[get("/enroll_group")]
+pub async fn get_all_groups(conn: Connection<'_, Db>) -> Result<Json<Vec<enroll_group::Model>>, NotFound<String>> {
+    let groups = EnrollGroup::all(conn.into_inner())
+        .await
+        .map_err(|e| NotFound(e.to_string()))?;
+
+    Ok(Json(groups))
+}
+
+#[post("/patients", data = "<formdata>")]
+pub async fn new_patient(
+    conn: Connection<'_, Db>,
+    formdata: Form<patient::Model>,
+) -> Result<Accepted<String>, BadRequest<String>> {
+    match Patient::create(conn.into_inner(), formdata.into_inner()).await {
+        Ok(_) => Ok(Accepted(Some("patient created".to_owned()))),
+        Err(e) => Err(BadRequest(Some(e.to_string())))
+    }
+}
 
 #[get("/patients?<page>&<page_size>")]
 pub async fn get_all_patients(
@@ -40,18 +69,7 @@ pub async fn get_patient(
     Ok(Json(patient))
 }
 
-#[post("/patients/new", data = "<formdata>")]
-pub async fn new_patient(
-    conn: Connection<'_, Db>,
-    formdata: Form<patient::Model>,
-) -> Result<Accepted<String>, BadRequest<String>> {
-    match Patient::create(conn.into_inner(), formdata.into_inner()).await {
-        Ok(_) => Ok(Accepted(Some("patient created".to_owned()))),
-        Err(e) => Err(BadRequest(Some(e.to_string())))
-    }
-}
-
-#[post("/patient/<id>", data = "<formdata>")]
+#[patch("/patients/<id>", data = "<formdata>")]
 pub async fn update_patient(
     conn: Connection<'_, Db>,
     id: i32,

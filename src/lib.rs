@@ -1,5 +1,3 @@
-#[macro_use] extern crate rocket;
-
 pub mod entity;
 pub mod mutation;
 pub mod routes;

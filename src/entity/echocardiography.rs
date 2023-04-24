@@ -17,14 +17,6 @@ pub struct Model {
     pub lad: Option<f64>,
     #[sea_orm(column_type = "Double", nullable)]
     pub lcx: Option<f64>,
-    #[sea_orm(column_type = "Double", nullable)]
-    pub rca_z: Option<f64>,
-    #[sea_orm(column_type = "Double", nullable)]
-    pub lmca_z: Option<f64>,
-    #[sea_orm(column_type = "Double", nullable)]
-    pub lad_z: Option<f64>,
-    #[sea_orm(column_type = "Double", nullable)]
-    pub lcx_z: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

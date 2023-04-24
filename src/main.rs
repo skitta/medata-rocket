@@ -10,5 +10,15 @@ fn rocket() -> _ {
     rocket::build()
         .attach(medata::Db::init())
         .attach(AdHoc::try_on_ignite("Migrate", medata::run_migrations))
-        .mount("/api/kawasaki", routes![get_all_patients, get_patient, new_patient, update_patient])
+        .mount(
+            "/api/kawasaki",
+            routes![
+                new_group,
+                get_all_groups,
+                new_patient,
+                get_all_patients,
+                get_patient,
+                update_patient
+            ]
+        )
 }
