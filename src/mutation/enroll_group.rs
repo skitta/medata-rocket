@@ -4,15 +4,17 @@ use crate::entity::enroll_group;
 pub struct EnrollGroup;
 
 impl EnrollGroup {
-    pub async fn create(db: &DbConn, name: &str) -> Result<(), DbErr> {
-        enroll_group::ActiveModel {
+    pub async fn create(db: &DbConn, name: &str) -> Result<i32, DbErr> {
+        let group = enroll_group::ActiveModel {
             name: Set(name.to_owned()),
             ..Default::default()
         }
         .save(db)
         .await?;
 
-        Ok(())
+        let group_id = group.id.clone().take().unwrap();
+
+        Ok(group_id)
     }
 
     pub async fn one(db: &DbConn, id: i32) -> Result<enroll_group::Model, DbErr> {

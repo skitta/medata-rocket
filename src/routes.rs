@@ -9,11 +9,10 @@ use crate::mutation::{Patient, EnrollGroup};
 use crate::Db;
 
 #[post("/enroll_group/<name>")]
-pub async fn new_group(conn: Connection<'_, Db>, name: &str) -> Result<Accepted<String>, BadRequest<String>> {
-    match EnrollGroup::create(conn.into_inner(), name).await {
-        Ok(_) => Ok(Accepted(Some("patient created".to_owned()))),
-        Err(e) => Err(BadRequest(Some(e.to_string())))
-    }
+pub async fn new_group(conn: Connection<'_, Db>, name: &str) -> Result<Value, BadRequest<String>> {
+    let db = conn.into_inner();
+    let group_id = EnrollGroup::create(db, name).await.map_err(|e| BadRequest(Some(e.to_string())))?;
+    Ok(json!({"id": group_id}))
 }
 
 #[get("/enroll_group")]
